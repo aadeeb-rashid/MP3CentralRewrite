@@ -1,0 +1,23 @@
+{
+  "images" : [
+    {
+      "filename" : "AudioPlayerPlayButton1x.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "AudioPlayerPlayButton2x.png",
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "AudioPlayerPlayButton3x.png",
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
