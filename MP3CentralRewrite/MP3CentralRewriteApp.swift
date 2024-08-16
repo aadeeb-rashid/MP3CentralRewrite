@@ -11,15 +11,17 @@ import SwiftData
 @main
 struct MP3CentralRewriteApp: App {
   @Environment(\.scenePhase) var scenePhase
-  let persistenceController = PersistenceController.shared
+  let persistenceController = LibraryCache.persistenceManager
   
   var body: some Scene {
     WindowGroup {
-      LibraryView()
-        .environment(\.managedObjectContext, persistenceController.getContext())
-        .onAppear {
-          
-        }
+      NavigationStack {
+        LibraryView(viewModel: AppViewModel.shared)
+          .environment(\.managedObjectContext, persistenceController.getContext())
+          .onAppear {
+            
+          }
+      }
     }
     .onChange(of: scenePhase) {
       persistenceController.save()

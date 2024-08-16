@@ -9,18 +9,20 @@ import SwiftUI
 
 struct SongListView : View {
   @ObservedObject var viewModel : AppViewModel
+  @ObservedObject private var libraryCache = LibraryCache.shared
   
   var body: some View {
     ScrollView {
       
       AddCellView(viewModel: viewModel)
       
-      ForEach(viewModel.audioManager.library, id: \.self) {
+      ForEach(libraryCache.library, id: \.self) {
         song in
         
         SongCellView(song.name ?? "File Corrupted", viewModel: viewModel)
       }
     }
+    .animation(.easeInOut, value: libraryCache.library)
   }
   
   init(viewModel: AppViewModel) {
