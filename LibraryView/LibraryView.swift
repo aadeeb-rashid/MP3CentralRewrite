@@ -24,6 +24,9 @@ struct LibraryView: View {
       
       SongListView(viewModel: viewModel)
       
+      if viewModel.audioManager.queueManager?.currentSong() != nil {
+        CurrentSongWidget(audioManager: viewModel.audioManager)
+      }
     }
     .background(background())
     .fileImporter(isPresented: $viewModel.willImportFile, allowedContentTypes: [UTType.audio], onCompletion: viewModel.onFileImportComplete(result:))

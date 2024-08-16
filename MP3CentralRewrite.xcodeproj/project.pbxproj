@@ -15,6 +15,7 @@
 		8B5170EC2BE6F57C00E65E67 /* LibraryQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5170EB2BE6F57C00E65E67 /* LibraryQueue.swift */; };
 		8B5170FF2BEC751D00E65E67 /* PlayerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5170FE2BEC751D00E65E67 /* PlayerState.swift */; };
 		8B5171032BEC77F900E65E67 /* QueueManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5171022BEC77F900E65E67 /* QueueManager.swift */; };
+		8B554FCE2C6FFEEA001D6F82 /* CurrentSongWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B554FCD2C6FFEEA001D6F82 /* CurrentSongWidget.swift */; };
 		8B67A9B02B21922100737FC1 /* Play-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8B67A9AE2B21922100737FC1 /* Play-Bold.ttf */; };
 		8B67A9B12B21922100737FC1 /* Play-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8B67A9AF2B21922100737FC1 /* Play-Regular.ttf */; };
 		8B6A1D742BF007ED000A4174 /* AlertHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6A1D732BF007ED000A4174 /* AlertHandler.swift */; };
@@ -65,6 +66,7 @@
 		8B5170EB2BE6F57C00E65E67 /* LibraryQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryQueue.swift; sourceTree = "<group>"; };
 		8B5170FE2BEC751D00E65E67 /* PlayerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerState.swift; sourceTree = "<group>"; };
 		8B5171022BEC77F900E65E67 /* QueueManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueManager.swift; sourceTree = "<group>"; };
+		8B554FCD2C6FFEEA001D6F82 /* CurrentSongWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentSongWidget.swift; sourceTree = "<group>"; };
 		8B67A9AE2B21922100737FC1 /* Play-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Play-Bold.ttf"; sourceTree = "<group>"; };
 		8B67A9AF2B21922100737FC1 /* Play-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Play-Regular.ttf"; sourceTree = "<group>"; };
 		8B67A9B22B2192D700737FC1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -144,6 +146,7 @@
 				8B4FFF672B5EDEFD007B7BE2 /* SongListView.swift */,
 				8BF903D52B201CDB00DF5E9B /* SongCellView.swift */,
 				8BC502D92B48EFFA00EDB3D1 /* AddCellView.swift */,
+				8B554FCD2C6FFEEA001D6F82 /* CurrentSongWidget.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -402,6 +405,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B554FCE2C6FFEEA001D6F82 /* CurrentSongWidget.swift in Sources */,
 				8BC6B9D22B4FA843004CCEED /* AppViewModel.swift in Sources */,
 				8B7048FD2B6239BC007E32D4 /* SongCenterView+PlayerControls.swift in Sources */,
 				8BF903D42B2010B400DF5E9B /* LibraryView.swift in Sources */,
