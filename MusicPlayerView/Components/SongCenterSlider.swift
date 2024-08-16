@@ -9,21 +9,25 @@ import Foundation
 import SwiftUI
 struct SongCenterSlider: UIViewRepresentable {
   @Binding var value: Double
+  var onValueChanged: () -> Void
   
   class Coordinator: NSObject {
     var value: Binding<Double>
+    var onValueChanged: () -> Void
     
-    init(value: Binding<Double>) {
+    init(value: Binding<Double>, onValueChanged: @escaping () -> Void) {
       self.value = value
+      self.onValueChanged = onValueChanged
     }
     
-    @objc func valueChanged(_ sender: UISlider) {
-      self.value.wrappedValue = Double(sender.value)
+    @objc func sliderTouchUpInside(_ sender: UISlider) {
+        self.value.wrappedValue = Double(sender.value)
+        self.onValueChanged()
     }
   }
   
   func makeCoordinator() -> SongCenterSlider.Coordinator {
-    Coordinator(value: $value)
+    Coordinator(value: $value, onValueChanged: onValueChanged)
   }
   
   func makeUIView(context: Context) -> UISlider {
@@ -37,7 +41,7 @@ struct SongCenterSlider: UIViewRepresentable {
     
     slider.addTarget(
       context.coordinator,
-      action: #selector(Coordinator.valueChanged(_:)),
+      action: #selector(Coordinator.sliderTouchUpInside(_:)),
       for: .valueChanged
     )
     

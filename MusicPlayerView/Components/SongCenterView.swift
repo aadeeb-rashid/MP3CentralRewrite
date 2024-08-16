@@ -9,13 +9,16 @@ import SwiftUI
 
 struct SongCenterView: View {
   
-  @ObservedObject var appViewModel = AppViewModel.shared
+  @ObservedObject var audioManager = AppViewModel.shared.audioManager
+  @State var shuffleMode: Bool = false
+  @State var repeatMode: Bool = false
   
   var body: some View {
     
     VStack {
       
-      Text(appViewModel.audioManager.library[appViewModel.audioManager.songIndex].name ?? "File Corrupted")
+      Text(audioManager.queueManager?.currentSong().name ?? "Corrupted File")
+        .animation(.easeInOut, value: audioManager.queueManager?.currentSong().name)
         .multilineTextAlignment(.center)
         .font(Font.custom("Play", size: 25))
         .foregroundStyle(Color.black)
@@ -26,7 +29,9 @@ struct SongCenterView: View {
         .padding(.horizontal, 20)
         .padding(.top, 20)
       
-      SongCenterSlider(value: $appViewModel.audioManager.songCurrentPosition)
+      SongCenterSlider(value: $audioManager.songCurrentPosition) {
+        audioManager.seekToTime()
+      }
         .padding(.horizontal, 20)
       
       timerLabels()

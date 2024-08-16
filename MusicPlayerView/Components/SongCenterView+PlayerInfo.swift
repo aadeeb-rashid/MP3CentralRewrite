@@ -13,7 +13,8 @@ extension SongCenterView {
   func shuffleAndRepeatButtons() -> some View {
     HStack {
       Button(action: {
-        self.appViewModel.audioManager.shuffleButtonPressed()
+        self.shuffleMode.toggle()
+        self.audioManager.shuffleButtonPressed()
       }, label: {
         shuffleButtonImage()
       })
@@ -21,7 +22,8 @@ extension SongCenterView {
       Spacer()
       
       Button(action: {
-        appViewModel.audioManager.repeatButtonPressed()
+        self.repeatMode.toggle()
+        self.audioManager.repeatButtonPressed()
       }, label: {
         repeatButtonImage()
       })
@@ -30,13 +32,13 @@ extension SongCenterView {
   
   func timerLabels() -> some View {
     HStack {
-      Text("0:00")
+      Text("\(self.audioManager.currentTime)")
         .font(Font.custom("Play", size: 14))
         .foregroundStyle(Color.black)
       
       Spacer()
       
-      Text("12:00")
+      Text("\(self.audioManager.timeRemaining)")
         .font(Font.custom("Play", size: 14))
         .foregroundStyle(Color.black)
     }
@@ -50,7 +52,7 @@ extension SongCenterView {
   }
   
   func getShuffleButtonImageName() -> String {
-    appViewModel.audioManager.shuffleMode ? "MusicPlayerShuffleOn" : "MusicPlayerShuffleOff"
+    shuffleMode ? "MusicPlayerShuffleOn" : "MusicPlayerShuffleOff"
   }
   
   func repeatButtonImage() -> some View {
@@ -61,6 +63,6 @@ extension SongCenterView {
   }
   
   func getRepeatButtonImageName() -> String {
-    appViewModel.audioManager.repeatMode ? "MusicPlayerRepeatOn" : "MusicPlayerRepeatOff"
+    repeatMode ? "MusicPlayerRepeatOn" : "MusicPlayerRepeatOff"
   }
 }

@@ -10,80 +10,37 @@ import Combine
 import AVFoundation
 import CoreData
 import MediaPlayer
-class AudioManager : NSObject, AVAudioPlayerDelegate
+import SwiftUI
+class AudioManager : NSObject, ObservableObject, AVAudioPlayerDelegate
 {
-  @Published var library : [LocalFile] = []
-  private var cancellables: Set<AnyCancellable> = []
-  
-  private var audioPlayer: AVAudioPlayer = AVAudioPlayer()
-  
-  
-  @Published var isPlaying : Bool = false
-  @Published var shuffleMode : Bool = true {
-    didSet {
-      if shuffleMode {
-        self.buildShuffleQueue()
-      }
-    }
+  var library : [LocalFile] {
+    LibraryCache.shared.library
   }
-  @Published var repeatMode : Bool = true
   
-  @Published var songIndex : Int = 0
-  @Published var songCurrentPosition : Double = 0.5
+  @Published var queueManager : QueueManager? = nil
   
-  var shuffleQueue : [Int]? = nil
+  @Published private var audioPlayer: AVAudioPlayer = AVAudioPlayer()
+  @Published var isPlaying: Bool = false
+  @Published var songCurrentPosition: Double = 0.0 
+  
+  @Published var currentTime: String = "0:00"
+  @Published var timeRemaining: String = "0:00"
+  var timer: Timer? = nil
   
   override init() {
     super.init()
-    self.loadLibrary()
-    self.setupSubscriptions()
     self.setupForAudioPlayOutsideOfApp()
   }
   
-  private func loadLibrary() {
-    let fetchRequest: NSFetchRequest<LocalFile> = LocalFile.fetchRequest()
-    
-    do {
-      self.library = try PersistenceController.shared.getContext().fetch(fetchRequest)
-    } catch {
-      //TODO: Handle Error
-    }
+  func setFirstQueue(_ queueManager: QueueManager) {
+    self.queueManager = queueManager
+    self.audioPlayer.prepareToPlay()
+    self.playAudioFile(file: self.queueManager!.currentSong())
+    self.resetTimers()
   }
   
-  private func setupSubscriptions() {
-    let context = PersistenceController.shared.getContext()
-    
-    NotificationCenter.default.publisher(for: NSManagedObjectContext.didChangeObjectsNotification, object: context)
-      .sink { [weak self] _ in
-        self?.loadLibrary()
-      }
-      .store(in: &cancellables)
-  }
-  
-  func prepareToPlay() {
-    audioPlayer.prepareToPlay()
-  }
-  
-  func getAudioPlayerTime() -> TimeInterval {
-    return audioPlayer.currentTime
-  }
-  
-  func setVolume(value: Float) {
-    audioPlayer.setVolume(value, fadeDuration: 0.5);
-  }
-  
-  func stopPlaying() {
-    if(audioPlayer.isPlaying) {
-      audioPlayer.stop()
-    }
-  }
-  
-  func playAudioFromIndex(index: Int) {
-    self.songIndex = index;
-    if(index >= library.count) {
-      self.songIndex = 0;
-    }
-    let fileName : String = library[songIndex].name ?? ""
+  private func playAudioFile(file: LocalFile) {
+    let fileName : String = file.name ?? ""
     
     let documentsDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
     let audioUrl = documentsDirectoryURL.appendingPathComponent(fileName)
@@ -92,20 +49,133 @@ class AudioManager : NSObject, AVAudioPlayerDelegate
     }
   }
   
-  func playAudioFromUrl(url : URL) {
+  private func playAudioFromUrl(url : URL) {
     do {
       try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback)
       try AVAudioSession.sharedInstance().setActive(true)
       self.audioPlayer = try AVAudioPlayer(contentsOf: url)
       self.play()
+      self.resetTimers()
       self.updateMetaData()
       self.audioPlayer.delegate = self
-      self.setVolume(value: 1)
-      self.audioPlayer.numberOfLoops = self.repeatMode ? -1 : 0
     }
-    catch let error as NSError{
-      //TODO: Handle Error
+    catch let error as NSError {
+      AlertHandler.shared.handleError(error)
     }
+  }
+  
+  func playPause() {
+    audioPlayer.isPlaying ? self.pause() : self.play()
+  }
+  
+  private func pause() {
+    self.audioPlayer.pause()
+    self.isPlaying = self.audioPlayer.isPlaying
+    self.stopTimers()
+    self.updateMetaData()
+  }
+  
+  private func play() {
+    self.audioPlayer.play()
+    self.isPlaying = self.audioPlayer.isPlaying
+    self.startTimers()
+    self.updateMetaData()
+  }
+  
+  func rewind() {
+    guard let queueManager = queueManager else { return }
+    audioPlayer.currentTime > 2.0 ? self.playAudioFile(file: queueManager.currentSong()) : self.playPrevSong()
+  }
+  
+  private func playPrevSong() {
+    guard let queueManager = queueManager else { return }
+    self.playAudioFile(file: queueManager.previousSong())
+  }
+  
+  func forward() {
+    self.playNextSong()
+  }
+  
+  internal func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+    self.playNextSong()
+  }
+  
+  private func playNextSong() {
+    guard let queueManager = queueManager else { return }
+    self.playAudioFile(file: queueManager.nextSong())
+  }
+  
+  func shuffleButtonPressed() {
+    self.queueManager?.shuffleTapped()
+  }
+  
+  func repeatButtonPressed() {
+    self.queueManager?.repeatTapped()
+  }
+  
+  func seekToTime() {
+    self.seekToTime(time: TimeInterval(songCurrentPosition * audioPlayer.duration))
+  }
+  
+  private func seekToTime(time : TimeInterval) {
+    if(time >= self.audioPlayer.duration) {
+      self.audioPlayer.currentTime = self.audioPlayer.duration - 1;
+      return
+    }
+    self.audioPlayer.currentTime = time
+    self.updateMetaData()
+  }
+  
+  
+  
+  func startTimers() {
+    self.timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] _ in
+      self?.updateSlider()
+      self?.updateAudioPlayerTime()
+      self?.updateAudioPlayerTimeRemaining()
+    }
+  }
+  
+  func stopTimers() {
+    self.timer = nil
+  }
+  
+  func resetTimers() {
+    stopTimers()
+    startTimers()
+  }
+  
+  func updateAudioPlayerTime() {
+    let timeInterval = audioPlayer.currentTime
+    let minutes = Int(timeInterval) / 60
+    let seconds = Int(timeInterval) % 60
+    self.currentTime = String(format: "%02d:%02d", minutes, seconds)
+  }
+  
+  func updateAudioPlayerTimeRemaining() {
+    let timeInterval = audioPlayer.duration - audioPlayer.currentTime
+    let minutes = Int(timeInterval) / 60
+    let seconds = Int(timeInterval) % 60
+    self.timeRemaining = String(format: "%02d:%02d", minutes, seconds)
+  }
+  
+  func updateSlider() {
+    self.songCurrentPosition = audioPlayer.currentTime / audioPlayer.duration
+  }
+  
+  internal func audioPlayerDecodeErrorDidOccur(_ player: AVAudioPlayer, error: Error?) {
+    guard let error = error else { return }
+    
+    AlertHandler.shared.handleError(error)
+  }
+  
+  func updateMetaData() {
+    var nowPlayingInfo = [String : Any]()
+    nowPlayingInfo[MPMediaItemPropertyTitle] = self.queueManager?.currentSong().name ?? "MP3Central";
+    nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = audioPlayer.currentTime
+    nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = audioPlayer.duration
+    nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = audioPlayer.rate
+    MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
   }
   
   func setupForAudioPlayOutsideOfApp() {
@@ -122,7 +192,7 @@ class AudioManager : NSObject, AVAudioPlayerDelegate
     commandCenter.playCommand.addTarget
     {
       [unowned self] event in
-      self.pause()
+      self.play()
       return .success
     }
   }
@@ -131,25 +201,9 @@ class AudioManager : NSObject, AVAudioPlayerDelegate
     commandCenter.pauseCommand.addTarget
     {
       [unowned self] event in
-      self.play()
+      self.pause()
       return.success
     }
-  }
-  
-  func playPause() {
-    audioPlayer.isPlaying ? self.pause() : self.play()
-  }
-  
-  private func pause() {
-    self.audioPlayer.pause()
-    self.isPlaying = false
-    self.updateMetaData()
-  }
-  
-  private func play() {
-    self.audioPlayer.play()
-    self.isPlaying = true
-    self.updateMetaData()
   }
   
   private func addRewindButtonToCommandCenter(commandCenter: MPRemoteCommandCenter) {
@@ -160,64 +214,12 @@ class AudioManager : NSObject, AVAudioPlayerDelegate
     }
   }
   
-  func rewind() {
-    audioPlayer.currentTime > 2.0 ? self.playAudioFromIndex(index: self.songIndex) : self.playPrevSong()
-  }
-  
-  private func playPrevSong() {
-    self.songIndex == 0 ? self.playAudioFromIndex(index: library.count - 1) : self.playAudioFromIndex(index: self.songIndex - 1)
-  }
-  
   private func addForwardButtonToCommandCenter(commandCenter: MPRemoteCommandCenter) {
     commandCenter.nextTrackCommand.addTarget {
       [unowned self] event in
       self.forward()
       return .success
     }
-  }
-  
-  func forward() {
-    self.playNextSong();
-  }
-  
-  func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-    self.playNextSong()
-  }
-  
-  private func playNextSong()
-  {
-    if repeatMode {
-      self.playAudioFromIndex(index: self.songIndex)
-    } else if shuffleMode {
-      self.playNextSongFromShuffleQueue()
-    } else {
-      self.playAudioFromIndex(index: self.songIndex + 1 & self.library.count)
-    }
-  }
-  
-  private func playNextSongFromShuffleQueue()
-  {
-    guard let shuffleQueue = self.shuffleQueue else {
-      self.buildShuffleQueue()
-      self.playNextSongFromShuffleQueue()
-      return
-    }
-    let shuffleQueueIndex : Int = shuffleQueue.firstIndex(of: self.songIndex) ?? 0
-    let newSongIndex = shuffleQueue[(shuffleQueueIndex+1) % (self.shuffleQueue?.count ?? 1)]
-    self.playAudioFromIndex(index: newSongIndex)
-  }
-  
-  func shuffleButtonPressed() {
-    self.shuffleMode.toggle()
-  }
-  
-  func buildShuffleQueue() {
-    shuffleQueue = Array(library.indices)
-    shuffleQueue?.shuffle()
-  }
-  
-  func clearShuffleQueue() {
-    self.shuffleQueue = nil
   }
   
   private func addSeekingToCommandCenter(commandCenter: MPRemoteCommandCenter) {
@@ -227,34 +229,5 @@ class AudioManager : NSObject, AVAudioPlayerDelegate
       self.seekToTime(time: time)
       return .success
     }
-  }
-  
-  func seekToTime(time : TimeInterval) {
-    if(time >= self.audioPlayer.duration) {
-      self.audioPlayer.currentTime = self.audioPlayer.duration - 1;
-      return
-    }
-    self.audioPlayer.currentTime = time
-    self.updateMetaData()
-  }
-  
-  func repeatButtonPressed() {
-    repeatMode.toggle()
-    self.audioPlayer.numberOfLoops = repeatMode ? -1 : 0
-  }
-  
-  func audioPlayerDecodeErrorDidOccur(_ player: AVAudioPlayer, error: Error?) {
-    if let error = error {
-      //TODO: Handle Error
-    }
-  }
-  
-  func updateMetaData() {
-    var nowPlayingInfo = [String : Any]()
-    nowPlayingInfo[MPMediaItemPropertyTitle] = self.library[self.songIndex].name;
-    nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = audioPlayer.currentTime
-    nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = audioPlayer.duration
-    nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = audioPlayer.rate
-    MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
   }
 }

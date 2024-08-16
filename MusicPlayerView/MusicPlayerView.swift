@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MusicPlayerView: View {
-  @Environment(\.presentationMode) var presentationMode
+  @Binding var showMusicPlayer: Bool
   
   let VERTICAL_PADDING : CGFloat = 45.0
   
@@ -41,20 +41,19 @@ struct MusicPlayerView: View {
   
   func backButton() -> some View {
     Button(action: {
-      presentationMode.wrappedValue.dismiss()
+      self.showMusicPlayer = false
     }, label: {
       Text("< Your Library")
-        .font(Font.custom("Play", size: 24))
+        .font(Font.custom("Play", size: 25))
         .foregroundStyle(.black)
         .bold()
-        .frame(height: 20)
         .padding(.top, VERTICAL_PADDING)
-        .padding(.leading, 10)
+        .padding(.leading, 25)
     })
   }
   
 }
 
 #Preview {
-  MusicPlayerView()
+  MusicPlayerView(showMusicPlayer: Binding(get: {return true}, set: {_ in }))
 }

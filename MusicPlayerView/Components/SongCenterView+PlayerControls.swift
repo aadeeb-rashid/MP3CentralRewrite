@@ -13,7 +13,7 @@ extension SongCenterView {
     HStack {
       
       Button(action: {
-        self.appViewModel.audioManager.rewind()
+        self.audioManager.rewind()
       }, label: {
         getRewindButtonImage()
       })
@@ -21,7 +21,7 @@ extension SongCenterView {
       Spacer()
       
       Button(action: {
-        self.appViewModel.audioManager.playPause()
+        self.audioManager.playPause()
       }, label: {
         getPlayPauseButtonImage()
       })
@@ -29,7 +29,7 @@ extension SongCenterView {
       Spacer()
       
       Button(action: {
-        self.appViewModel.audioManager.forward()
+        self.audioManager.forward()
       }, label: {
         getForwardButtonImage()
       })
@@ -62,6 +62,6 @@ extension SongCenterView {
   }
   
   func getPlayPauseButtonImageName() -> String {
-    appViewModel.audioManager.isPlaying ? "MusicPlayerPlay" : "MusicPlayerPause"
+    self.audioManager.isPlaying ? "MusicPlayerPause" : "MusicPlayerPlay"
   }
 }
