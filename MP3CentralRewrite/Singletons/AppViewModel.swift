@@ -57,4 +57,8 @@ class AppViewModel : ObservableObject {
     self.audioManager.setFirstQueue(QueueManager(currentSong: currentSong, queue: queue))
     self.musicPlayerScreenVisible = true
   }
+  
+  func navigateToMusicPlayerScreen() {
+    self.musicPlayerScreenVisible = true
+  }
 }

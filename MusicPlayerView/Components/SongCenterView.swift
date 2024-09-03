@@ -10,8 +10,8 @@ import SwiftUI
 struct SongCenterView: View {
   
   @ObservedObject var audioManager = AppViewModel.shared.audioManager
-  @State var shuffleMode: Bool = false
-  @State var repeatMode: Bool = false
+  var shuffleMode: Bool { audioManager.queueManager?.state == .shuffleMode || audioManager.queueManager?.state == .repeatShuffleMode}
+  var repeatMode: Bool { audioManager.queueManager?.state == .repeatMode || audioManager.queueManager?.state == .repeatShuffleMode}
   
   var body: some View {
     

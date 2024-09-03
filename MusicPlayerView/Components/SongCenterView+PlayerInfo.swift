@@ -13,7 +13,6 @@ extension SongCenterView {
   func shuffleAndRepeatButtons() -> some View {
     HStack {
       Button(action: {
-        self.shuffleMode.toggle()
         self.audioManager.shuffleButtonPressed()
       }, label: {
         shuffleButtonImage()
@@ -22,7 +21,6 @@ extension SongCenterView {
       Spacer()
       
       Button(action: {
-        self.repeatMode.toggle()
         self.audioManager.repeatButtonPressed()
       }, label: {
         repeatButtonImage()

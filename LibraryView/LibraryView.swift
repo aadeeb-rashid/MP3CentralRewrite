@@ -26,6 +26,9 @@ struct LibraryView: View {
       
       if viewModel.audioManager.queueManager?.currentSong() != nil {
         CurrentSongWidget(audioManager: viewModel.audioManager)
+          .onTapGesture {
+            viewModel.musicPlayerScreenVisible = true
+          }
       }
     }
     .background(background())
