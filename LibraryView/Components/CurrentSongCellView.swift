@@ -17,14 +17,23 @@ struct CurrentSongCellView: View {
   
   var body: some View {
     HStack {
-      
-      Text(audioManager.queueManager?.currentSong().name ?? "Test.mp3")
-        .font(Font.custom("Play", size: 25))
-        .foregroundStyle(.white)
-        .bold()
-        .lineLimit(1)
-        .truncationMode(.tail)
-        .padding(.leading, 15)
+      VStack(alignment: .leading) {
+        Text("Now Playing: ")
+          .font(Font.custom("Play", size: 12))
+          .foregroundStyle(.red)
+          .bold()
+          .lineLimit(1)
+          .truncationMode(.tail)
+          .padding(.leading, 17)
+        
+        Text(audioManager.queueManager?.currentSong().name ?? "Test.mp3")
+          .font(Font.custom("Play", size: 25))
+          .foregroundStyle(.white)
+          .bold()
+          .lineLimit(1)
+          .truncationMode(.tail)
+          .padding(.leading, 17)
+      }
       
       Spacer()
       
