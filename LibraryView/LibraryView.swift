@@ -23,7 +23,8 @@ struct LibraryView: View {
       titleText()
       
       if viewModel.audioManager.queueManager?.currentSong() != nil {
-        CurrentSongWidget(audioManager: viewModel.audioManager)
+        CurrentSongCellView(audioManager: viewModel.audioManager)
+          .padding(.top, -10)
           .onTapGesture {
             viewModel.musicPlayerScreenVisible = true
           }
