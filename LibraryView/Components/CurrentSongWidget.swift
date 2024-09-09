@@ -12,10 +12,18 @@ struct CurrentSongWidget: View {
   
   var body: some View {
     HStack {
-      Text(audioManager.queueManager?.currentSong().name ?? "")
-        .font(Font.custom("Play", size: 20))
-        .foregroundStyle(.white)
-        .bold()
+      VStack(alignment: .leading) {
+        Text("Now Playing: ")
+          .font(Font.custom("Play", size: 10))
+          .foregroundStyle(.red)
+          .bold()
+        
+        Text(audioManager.queueManager?.currentSong().name ?? "Test.mp3")
+          .font(Font.custom("Play", size: 20))
+          .foregroundStyle(.white)
+          .bold()
+        
+      }
       
       Spacer()
       
@@ -28,7 +36,7 @@ struct CurrentSongWidget: View {
     .padding(10)
     .background(.black)
     .clipShape(RoundedRectangle(cornerSize: CGSize(width: 5, height: 5)))
-    .padding(.horizontal, 10)
+    .padding(.horizontal, 5)
   }
   
   func getPlayPauseButtonImage() -> some View {

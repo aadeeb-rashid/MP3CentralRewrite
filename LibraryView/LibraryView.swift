@@ -22,14 +22,14 @@ struct LibraryView: View {
       
       titleText()
       
-      SongListView(viewModel: viewModel)
-      
       if viewModel.audioManager.queueManager?.currentSong() != nil {
         CurrentSongWidget(audioManager: viewModel.audioManager)
           .onTapGesture {
             viewModel.musicPlayerScreenVisible = true
           }
       }
+      
+      SongListView(viewModel: viewModel)
     }
     .background(background())
     .fileImporter(isPresented: $viewModel.willImportFile, allowedContentTypes: [UTType.audio], onCompletion: viewModel.onFileImportComplete(result:))
