@@ -1,0 +1,15 @@
+{
+  "originHash" : "2b597cc2b5457a06e29f1f1f5d9592020ad0717a9958a4d0f0f50a5696d6dbc8",
+  "pins" : [
+    {
+      "identity" : "marquee",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SwiftUIKit/Marquee",
+      "state" : {
+        "revision" : "69d7b7c6c34ed41d9299cfa8406f91f529c4fef3",
+        "version" : "0.3.0"
+      }
+    }
+  ],
+  "version" : 3
+}

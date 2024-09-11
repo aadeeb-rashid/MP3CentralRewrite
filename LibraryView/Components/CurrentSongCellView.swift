@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Marquee
 
 struct CurrentSongCellView: View {
   
@@ -24,15 +25,22 @@ struct CurrentSongCellView: View {
           .bold()
           .lineLimit(1)
           .truncationMode(.tail)
-          .padding(.leading, 17)
+          .padding(.leading, 25)
         
-        Text(audioManager.queueManager?.currentSong().name ?? "Test.mp3")
-          .font(Font.custom("Play", size: 25))
-          .foregroundStyle(.white)
-          .bold()
-          .lineLimit(1)
-          .truncationMode(.tail)
-          .padding(.leading, 17)
+        Marquee {
+          Text(audioManager.queueManager?.currentSong().name ?? "Test.mp3")
+            .font(Font.custom("Play", size: 25))
+            .foregroundStyle(.white)
+            .bold()
+            .lineLimit(1)
+            .truncationMode(.tail)
+            .padding(.bottom, 5)
+            .padding(.top, -5)
+            
+        }
+        .marqueeDuration(5)
+        .padding(.leading, 17)
+        .frame(height: 40)
       }
       
       Spacer()
