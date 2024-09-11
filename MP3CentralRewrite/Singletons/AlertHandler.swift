@@ -34,20 +34,26 @@ class AlertHandler: ObservableObject {
 
   func remindForNewSongWhilePlaying() {
     if AppViewModel.shared.audioManager.isPlaying {
-      let alert = Alert(title: Text("File has been added, you will have to reset the music player (tap a song) to update the queue."))
-      self.setAlert(alert)
+      self.setAlert("File has been added, you will have to reset the music player (tap a song) to update the queue.")
     }
   }
   
   func remindForDeletedSongWhilePlaying() {
     if AppViewModel.shared.audioManager.isPlaying {
-      let alert = Alert(title: Text("File has been deleted, you will have to reset the music player (tap a song) to update the queue."))
-      self.setAlert(alert)
+      self.setAlert("File has been deleted, you will have to reset the music player (tap a song) to update the queue.")
     }
   }
   
   func throwSecurityScopeError() {
-    let alert = Alert(title: Text("We do not have proper access to the files neceeary, please reimport files or redownload app."))
+    self.setAlert("We do not have proper access to the files necessary, please reimport files or redownload app.")
+  }
+  
+  func throwEmptyQueueError() {
+    self.setAlert("Please tap on a song to play it.")
+  }
+  
+  private func setAlert(_ message: String) {
+    let alert = Alert(title: Text(message))
     self.setAlert(alert)
   }
   
