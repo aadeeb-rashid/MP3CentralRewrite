@@ -21,7 +21,7 @@ struct SongCellView: View {
     HStack {
       
       Button(action: {
-        AppViewModel.shared.deleteSong(songName)
+        viewModel.deleteSong(songName)
       }, label: {
         trashButtonImage()
       })
