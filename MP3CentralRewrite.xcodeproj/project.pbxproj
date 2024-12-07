@@ -21,6 +21,7 @@
 		8B6E1D8E2B563CFD0083F10F /* SongCenterSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6E1D8D2B563CFD0083F10F /* SongCenterSlider.swift */; };
 		8B7048FB2B6238EA007E32D4 /* SongCenterView+PlayerInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7048FA2B6238EA007E32D4 /* SongCenterView+PlayerInfo.swift */; };
 		8B7048FD2B6239BC007E32D4 /* SongCenterView+PlayerControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7048FC2B6239BC007E32D4 /* SongCenterView+PlayerControls.swift */; };
+		8B8919792D03BBAF0073B3E8 /* CarPlayLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8919782D03BBAF0073B3E8 /* CarPlayLibraryView.swift */; };
 		8BB686532B71F301002EF6DA /* AudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB686522B71F301002EF6DA /* AudioManager.swift */; };
 		8BC502DA2B48EFFA00EDB3D1 /* AddCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC502D92B48EFFA00EDB3D1 /* AddCellView.swift */; };
 		8BC6B9D22B4FA843004CCEED /* AppViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC6B9D12B4FA843004CCEED /* AppViewModel.swift */; };
@@ -75,6 +76,7 @@
 		8B6E1D8D2B563CFD0083F10F /* SongCenterSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongCenterSlider.swift; sourceTree = "<group>"; };
 		8B7048FA2B6238EA007E32D4 /* SongCenterView+PlayerInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SongCenterView+PlayerInfo.swift"; sourceTree = "<group>"; };
 		8B7048FC2B6239BC007E32D4 /* SongCenterView+PlayerControls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SongCenterView+PlayerControls.swift"; sourceTree = "<group>"; };
+		8B8919782D03BBAF0073B3E8 /* CarPlayLibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPlayLibraryView.swift; sourceTree = "<group>"; };
 		8BB686522B71F301002EF6DA /* AudioManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioManager.swift; sourceTree = "<group>"; };
 		8BC502D92B48EFFA00EDB3D1 /* AddCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCellView.swift; sourceTree = "<group>"; };
 		8BC6B9D12B4FA843004CCEED /* AppViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppViewModel.swift; sourceTree = "<group>"; };
@@ -209,6 +211,7 @@
 			children = (
 				8BF01C942D02CD4F008574A4 /* CarPlaySceneDelegate.swift */,
 				8BF01C982D02CD96008574A4 /* CarPlayHelloWorld.swift */,
+				8B8919782D03BBAF0073B3E8 /* CarPlayLibraryView.swift */,
 			);
 			path = Carplay;
 			sourceTree = "<group>";
@@ -423,6 +426,7 @@
 				8BC6B9D22B4FA843004CCEED /* AppViewModel.swift in Sources */,
 				8B7048FD2B6239BC007E32D4 /* SongCenterView+PlayerControls.swift in Sources */,
 				8BF903D42B2010B400DF5E9B /* LibraryView.swift in Sources */,
+				8B8919792D03BBAF0073B3E8 /* CarPlayLibraryView.swift in Sources */,
 				8B5170E82BE6E28600E65E67 /* ShuffleQueue.swift in Sources */,
 				8BF01C992D02CD96008574A4 /* CarPlayHelloWorld.swift in Sources */,
 				8BB686532B71F301002EF6DA /* AudioManager.swift in Sources */,
