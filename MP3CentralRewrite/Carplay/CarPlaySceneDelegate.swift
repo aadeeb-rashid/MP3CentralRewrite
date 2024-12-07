@@ -11,12 +11,10 @@ import CarPlay
 
 class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate {
     func templateApplicationScene(_ templateApplicationScene: CPTemplateApplicationScene, didConnect interfaceController: CPInterfaceController) {
-      let placeholder = CPListTemplate(title: "Loading...", sections: [])
-      interfaceController.setRootTemplate(placeholder, animated: false) { _, _ in
-        interfaceController.setRootTemplate(CarPlayLibraryView().template, animated: true, completion: nil)
-      }
+      CarPlayViewModel.shared = CarPlayViewModel(interfaceController: interfaceController)
     }
     
     func templateApplicationScene(_ templateApplicationScene: CPTemplateApplicationScene, didDisconnectInterfaceController interfaceController: CPInterfaceController) {
+      CarPlayViewModel.shared = nil
     }
 }

@@ -15,11 +15,25 @@ class CarPlayLibraryView {
   
   var items: [CPListItem] {
     return LibraryCache.shared.library.map { localFile in
-      CPListItem(text: localFile.name, detailText: nil, image: UIImage(systemName: "play.fill")?.withTintColor(.black))
+      let item = CPListItem(text: localFile.name, detailText: nil, image: UIImage(systemName: "play.fill"))
+      item.handler = { _, completion in
+        self.onItemTapped(item: localFile)
+        completion()
+      }
+      return item
     }
   }
   
   private var section: CPListSection {
     return CPListSection(items: items)
+  }
+  
+  func onItemTapped(item: LocalFile) {
+    guard let songName = item.name else {
+      //TODO: Throw Carplay Error or Alert Here
+      return
+    }
+    AppViewModel.shared.navigateToMusicPlayerScreen(songName: songName)
+    CarPlayViewModel.shared?.showNowPlayingScreen()
   }
 }
