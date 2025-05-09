@@ -109,8 +109,16 @@ class AudioManager : NSObject, ObservableObject, AVAudioPlayerDelegate
     self.queueManager?.shuffleTapped()
   }
   
+  func isShuffle() -> Bool {
+    self.queueManager?.isShuffle() ?? false
+  }
+  
   func repeatButtonPressed() {
     self.queueManager?.repeatTapped()
+  }
+  
+  func isRepeat() -> Bool {
+    self.queueManager?.isRepeat() ?? false
   }
   
   func seekToTime() {
