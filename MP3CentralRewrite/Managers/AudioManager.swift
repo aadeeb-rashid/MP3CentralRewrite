@@ -186,6 +186,8 @@ class AudioManager : NSObject, ObservableObject, AVAudioPlayerDelegate
     self.addRewindButtonToCommandCenter(commandCenter: commandCenter)
     self.addForwardButtonToCommandCenter(commandCenter: commandCenter)
     self.addSeekingToCommandCenter(commandCenter: commandCenter)
+    self.addShuffleToCommandCenter(commandCenter: commandCenter)
+    self.addRepeatToCommandCenter(commandCenter: commandCenter)
   }
   
   private func addPlayButtonToCommandCenter(commandCenter: MPRemoteCommandCenter) {
@@ -227,6 +229,22 @@ class AudioManager : NSObject, ObservableObject, AVAudioPlayerDelegate
       [unowned self] event in
       let time = (event as? MPChangePlaybackPositionCommandEvent)?.positionTime ?? 0
       self.seekToTime(time: time)
+      return .success
+    }
+  }
+  
+  private func addShuffleToCommandCenter(commandCenter: MPRemoteCommandCenter) {
+    commandCenter.changeShuffleModeCommand.addTarget {
+      [unowned self] event in
+      self.shuffleButtonPressed()
+      return .success
+    }
+  }
+  
+  private func addRepeatToCommandCenter(commandCenter: MPRemoteCommandCenter) {
+    commandCenter.changeRepeatModeCommand.addTarget {
+      [unowned self] event in
+      self.repeatButtonPressed()
       return .success
     }
   }

@@ -26,10 +26,18 @@ class QueueManager {
   func currentSong() -> LocalFile {
     queue.currentSong
   }
+  
+  func isShuffle() -> Bool {
+    return state == .shuffleMode || state == .repeatShuffleMode
+  }
    
   func shuffleTapped() {
     self.state = self.state.shuffleTapped()
     reloadQueue()
+  }
+  
+  func isRepeat() -> Bool {
+    return state == .repeatMode || state == .repeatShuffleMode
   }
   
   func repeatTapped() {
