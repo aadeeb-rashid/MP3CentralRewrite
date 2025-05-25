@@ -56,5 +56,6 @@ class AppViewModel : ObservableObject {
     
     self.audioManager.setFirstQueue(QueueManager(currentSong: currentSong, queue: queue))
     self.musicPlayerScreenVisible = true
+    CarPlayViewModel.shared?.showNowPlayingScreen()
   }
 }

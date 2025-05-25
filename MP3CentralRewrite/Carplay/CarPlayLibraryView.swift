@@ -34,6 +34,5 @@ class CarPlayLibraryView {
       return
     }
     AppViewModel.shared.navigateToMusicPlayerScreen(songName: songName)
-    CarPlayViewModel.shared?.showNowPlayingScreen()
   }
 }
