@@ -184,6 +184,7 @@ class AudioManager : NSObject, ObservableObject, AVAudioPlayerDelegate
     nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = audioPlayer.duration
     nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = audioPlayer.rate
     MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
+    MPNowPlayingInfoCenter.default().playbackState = self.isPlaying ? .playing : .paused
   }
   
   func setupForAudioPlayOutsideOfApp() {

@@ -9,7 +9,6 @@ import CarPlay
 
 class CarPlayViewModel {
   //TODO: Fix NowPlaying Screen being broken if app is open
-  //TODO: FIx NowPlaying Screen not "Playing" when song is tapped
   //TODO: Fix Repeat and Shuffle Buttons not being auto-set if app is open
   //TODO: Fix Previous and Next Buttons only going in order and not using shuffle or repeat queues
   //TODO: Make custom screen(s)
